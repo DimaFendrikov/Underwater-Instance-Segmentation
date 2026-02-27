@@ -1,117 +1,40 @@
-# Underwater Instance Segmentation with Mask R-CNN
+# SeaClear Underwater Instance Segmentation – Mask R-CNN (COCO)
 
-## 1. Project Idea
+End-to-end computer vision pipeline for **instance segmentation** on underwater imagery:  
+**EDA → label strategy (superclasses) → COCO splits → training Mask R-CNN → COCOeval → checkpoints → visual validation**.
 
-This project focuses on **instance segmentation of complex underwater scenes** using a COCO-style dataset.
-
-Underwater imagery presents unique challenges: low contrast, color distortion, dynamic lighting, cluttered backgrounds, and a mix of object scales. The goal of this project is to build a robust and reproducible instance segmentation pipeline capable of detecting and segmenting various underwater objects in realistic conditions.
-
-The project follows a complete machine learning workflow:
-- Dataset analysis and preparation  
-- Train/validation/test split  
-- Model training  
-- COCO-style evaluation  
-- Qualitative and quantitative performance analysis  
+The project focuses not only on training a model, but on building a **reproducible dataset + evaluation workflow** that looks credible for real-world usage and research-style reporting.
 
 ---
 
-## 2. Challenges and Problem Setting
+## Problem
 
-Underwater visual data is particularly difficult for computer vision models due to:
+Underwater vision is challenging in practice:
 
-- **Severe class imbalance** — some categories contain very few instances, while others dominate the dataset  
-- **Small object segmentation** — many objects occupy a small portion of the image  
-- **Domain variability** — different locations and cameras introduce distribution shifts  
-- **Visual noise** — sand, vegetation, water turbidity, and motion blur affect detection quality  
+1. Images often have low visibility (turbidity), color shift, blur, reflections and uneven lighting;
+2. Objects can be small, partially occluded and visually similar to the background;
+3. A typical dataset contains multiple domains (different locations and cameras), which increases domain shift;
+4. Labels are frequently **highly imbalanced** – for example, biological categories may dominate the dataset and push the model to ignore rarer debris/equipment classes.
 
-Additionally, instance segmentation is inherently more complex than object detection because it requires precise pixel-level mask prediction.
-
-To ensure fair and realistic evaluation, the dataset was split at the **image level** into train, validation, and test subsets, preventing data leakage.
-
----
-
-## 3. Methodology
-
-The project uses **Mask R-CNN with a ResNet-50 + FPN backbone**, implemented via `torchvision`.
-
-Key methodological components:
-
-- COCO-format dataset and evaluation protocol  
-- Training with validation after each epoch  
-- Best checkpoint selection based on **validation segmentation AP**  
-- Final evaluation on a completely held-out test set  
-- Mixed precision training (AMP) for computational efficiency  
-- Confidence and mask thresholding for qualitative visualization  
-
-Model performance is evaluated using standard **COCO metrics**:
-
-- AP@[0.50:0.95] (primary metric)  
-- AP50 and AP75  
-- Separate analysis for small, medium, and large objects  
+As a result, a “train once and report accuracy” approach is not enough.  
+A strong solution must include **dataset analysis, a clear label strategy, correct COCO evaluation, and qualitative checks**.
 
 ---
 
-## 4. Implementation Overview
+## Idea and Approach
 
-This repository includes a complete end-to-end pipeline.
+The core idea is to build a clean, recruiter-ready pipeline that solves two key issues:
 
-### Data Processing
-- Exploratory Data Analysis (class distribution, object density, size distribution)  
-- Optional superclass grouping to reduce label sparsity  
-- Train/validation/test split generation in COCO format  
+1. **Imbalance and noisy taxonomy** – fine-grained labels are remapped into meaningful **superclasses** and dominant bio subclasses are downsampled to stabilize training;
+2. **Reproducibility** – the pipeline produces consistent artifacts (splits, checkpoints, metrics) and evaluates the model using the standard **COCOeval** protocol for both bounding boxes and masks.
 
-### Training
-- Mask R-CNN training loop  
-- Validation after each epoch  
-- Automatic checkpoint saving (best and last)  
-- Reproducible configuration and logging  
+Technically, the repository implements:
 
-### Evaluation
-- COCOeval for both bounding boxes and segmentation masks  
-- Independent test set evaluation  
-- Qualitative GT vs prediction visualization  
-
----
-
-## 5. Results
-
-### Validation (best checkpoint)
-
-- **bbox AP@[0.50:0.95]: 0.4737**  
-- **segm AP@[0.50:0.95]: 0.3926**  
-- segm AP50: 0.589  
-- segm AP75: 0.425  
-
-### Test (held-out dataset)
-
-- **bbox AP@[0.50:0.95]: 0.4804**  
-- **segm AP@[0.50:0.95]: 0.4071**  
-- segm AP50: 0.609  
-- segm AP75: 0.448  
-
-The test performance is consistent with validation, indicating stable generalization and no significant overfitting.
-
-As expected, segmentation of small objects remains the most challenging case, which is typical for Mask R-CNN in cluttered environments.
-
----
-
-## 6. Conclusions
-
-This project demonstrates a complete and reproducible instance segmentation workflow for challenging underwater scenes.
-
-Key takeaways:
-
-- A structured train/validation/test pipeline is essential for reliable evaluation  
-- COCO-style metrics provide detailed performance analysis  
-- The model generalizes well to unseen data  
-- Small-object segmentation remains the primary bottleneck  
-
-The current model serves as a strong baseline. Further improvements could include higher input resolution, longer training, stronger augmentation strategies, and anchor tuning.
-
----
-
-## 7. How to Run
-
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
+1. Dataset EDA with mask/bbox visualization (sanity checks);
+2. Domain-aware indexing (location/camera/domain);
+3. Controlled downsampling of dominant biological subclasses;
+4. Mapping fine-grained labels into robust **superclasses**;
+5. Export of COCO `train/val/test` splits;
+6. Training `maskrcnn_resnet50_fpn` (torchvision) with AMP + gradient accumulation;
+7. Evaluation with COCOeval (`bbox` and `segm`) + saving `best.pth`, `last.pth` and `metrics.json`;
+8. Visualization of **Ground Truth vs Predictions** for qualitative validation.
