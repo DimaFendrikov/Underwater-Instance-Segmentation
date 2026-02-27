@@ -1,40 +1,63 @@
-# SeaClear Underwater Instance Segmentation – Mask R-CNN (COCO)
-
-End-to-end computer vision pipeline for **instance segmentation** on underwater imagery:  
-**EDA → label strategy (superclasses) → COCO splits → training Mask R-CNN → COCOeval → checkpoints → visual validation**.
-
-The project focuses not only on training a model, but on building a **reproducible dataset + evaluation workflow** that looks credible for real-world usage and research-style reporting.
+# SeaClear Underwater Instance Segmentation  
+### A Reproducible Mask R-CNN Pipeline for COCO-Based Underwater Object Detection
 
 ---
 
-## Problem
+## Table of Contents
+- [Abstract](#abstract)
+- [Problem Statement](#problem-statement)
+- [Objectives](#objectives)
+- [Dataset Description](#dataset-description)
+- [Methodology](#methodology)
+- [Results](#results)
 
-Underwater vision is challenging in practice:
+---
+## Abstract
 
-1. Images often have low visibility (turbidity), color shift, blur, reflections and uneven lighting;
-2. Objects can be small, partially occluded and visually similar to the background;
-3. A typical dataset contains multiple domains (different locations and cameras), which increases domain shift;
-4. Labels are frequently **highly imbalanced** – for example, biological categories may dominate the dataset and push the model to ignore rarer debris/equipment classes.
+This project implements a reproducible end-to-end pipeline for **underwater instance segmentation** using the COCO annotation format and a Mask R-CNN (ResNet50-FPN) baseline.
 
-As a result, a “train once and report accuracy” approach is not enough.  
-A strong solution must include **dataset analysis, a clear label strategy, correct COCO evaluation, and qualitative checks**.
+The objective is not limited to training a segmentation model. Instead, the focus is on constructing a structured and evaluation-driven workflow that includes dataset analysis, label restructuring, imbalance mitigation, standardized COCO evaluation, and qualitative validation.
+
+Underwater imagery introduces domain variability, visual degradation, and severe class imbalance. To address these challenges, the pipeline incorporates a superclass labeling strategy and controlled downsampling of dominant biological subclasses.
+
+The result is a clean and reproducible segmentation framework that reflects practical machine learning engineering standards rather than a single experimental run.
 
 ---
 
-## Idea and Approach
+## Problem Statement
 
-The core idea is to build a clean, recruiter-ready pipeline that solves two key issues:
+Underwater instance segmentation presents multiple technical challenges:
 
-1. **Imbalance and noisy taxonomy** – fine-grained labels are remapped into meaningful **superclasses** and dominant bio subclasses are downsampled to stabilize training;
-2. **Reproducibility** – the pipeline produces consistent artifacts (splits, checkpoints, metrics) and evaluates the model using the standard **COCOeval** protocol for both bounding boxes and masks.
+1. **Visual degradation** – color distortion, low contrast, blur, and suspended particles significantly reduce object clarity;
+2. **Small and partially occluded objects** – debris and marine organisms often occupy small regions or blend with the background;
+3. **Domain variability** – multiple capture locations and camera systems introduce distribution shifts;
+4. **Severe class imbalance** – dominant biological subclasses may bias model training and suppress rare but important categories.
 
-Technically, the repository implements:
+A naïve training approach can lead to:
 
-1. Dataset EDA with mask/bbox visualization (sanity checks);
-2. Domain-aware indexing (location/camera/domain);
-3. Controlled downsampling of dominant biological subclasses;
-4. Mapping fine-grained labels into robust **superclasses**;
-5. Export of COCO `train/val/test` splits;
-6. Training `maskrcnn_resnet50_fpn` (torchvision) with AMP + gradient accumulation;
-7. Evaluation with COCOeval (`bbox` and `segm`) + saving `best.pth`, `last.pth` and `metrics.json`;
-8. Visualization of **Ground Truth vs Predictions** for qualitative validation.
+- Overfitting to dominant classes;
+- Poor cross-domain generalization;
+- Misleading evaluation results;
+- Low reproducibility.
+
+Therefore, the task requires a structured data pipeline, a deliberate label strategy, and standardized evaluation metrics to ensure robust and interpretable results.
+
+---
+
+## Objectives
+
+### Main Objective
+
+Develop a reproducible and evaluation-driven pipeline for underwater instance segmentation using COCO-formatted annotations.
+
+### Technical Objectives
+
+- Perform dataset exploration and structural validation (EDA);
+- Analyze class distribution and identify imbalance issues;
+- Introduce superclass mapping for robust label representation;
+- Apply controlled downsampling to dominant subclasses;
+- Generate consistent COCO train/val/test splits;
+- Train a Mask R-CNN (ResNet50-FPN) baseline;
+- Evaluate performance using COCOeval for both bounding boxes and segmentation masks;
+- Provide qualitative validation via Ground Truth vs Prediction visualization;
+- Store reproducible artifacts (splits, checkpoints, metrics logs).
