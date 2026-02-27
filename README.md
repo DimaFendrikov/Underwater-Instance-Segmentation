@@ -10,6 +10,9 @@
 - [Label Strategy](#label-strategy)
 - [Methodology](#methodology)
 - [Results](#results)
+- ## Limitations
+- ## Future Work
+- ## How to Run
 
 ---
 ## Abstract
@@ -218,7 +221,7 @@ These directions provide a clear roadmap for evolving the project from a strong 
 1. Download the [SeaClear Marine Debris Dataset](https://data.4tu.nl/datasets/4f1dff25-e157-4399-a5d4-478055461689).
 
 2. Place the dataset inside the `data/` directory of this repository;
-   
-3. Run the notebooks in order:
+3. 
+4. Run the notebooks in order:
    - `SeaClear_EDA_and_splits.ipynb`
    - `SeaClear_train.ipynb`
