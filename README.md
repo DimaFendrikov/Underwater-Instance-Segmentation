@@ -14,14 +14,15 @@
 ---
 ## Abstract
 
-This project implements a reproducible end-to-end pipeline for **underwater instance segmentation** using the COCO annotation format and a Mask R-CNN (ResNet50-FPN) baseline.
+This project presents a reproducible end-to-end pipeline for underwater instance segmentation built around the COCO annotation format and a Mask R-CNN (ResNet50-FPN) baseline.
 
-The objective is not limited to training a segmentation model. Instead, the focus is on constructing a structured and evaluation-driven workflow that includes dataset analysis, label restructuring, imbalance mitigation, standardized COCO evaluation, and qualitative validation.
+Rather than focusing solely on training a model, the primary goal is to design a structured and transparent workflow that reflects real-world machine learning engineering practices. The pipeline includes dataset exploration, class distribution analysis, label restructuring, imbalance mitigation, standardized evaluation using COCO metrics, and qualitative validation of predictions.
 
-Underwater imagery introduces domain variability, visual degradation, and severe class imbalance. To address these challenges, the pipeline incorporates a superclass labeling strategy and controlled downsampling of dominant biological subclasses.
+Underwater imagery poses distinct challenges: reduced visibility, color distortion, environmental noise, domain variability across locations and cameras, and significant class imbalance. These factors make naïve training setups unreliable and difficult to generalize.
 
-The result is a clean and reproducible segmentation framework that reflects practical machine learning engineering standards rather than a single experimental run.
+To address these issues, the project introduces a superclass labeling strategy and controlled downsampling of dominant biological subclasses, enabling more stable training and interpretable evaluation.
 
+The final result is not just a trained segmentation model, but a clean, reproducible, and evaluation-driven framework designed to demonstrate robust computer vision engineering methodology.
 ---
 
 ## Problem Statement
