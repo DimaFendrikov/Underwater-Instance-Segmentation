@@ -10,9 +10,9 @@
 - [Label Strategy](#label-strategy)
 - [Methodology](#methodology)
 - [Results](#results)
-- ## Limitations
-- ## Future Work
-- ## How to Run
+- [Limitations](#limitations)
+- [Future Work](#future-work)
+- [How to Run](#how-to-run)
 
 ---
 ## Abstract
