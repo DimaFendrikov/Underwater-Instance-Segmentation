@@ -21,7 +21,7 @@ This repository presents a complete end-to-end project for underwater instance s
 
 The project goes beyond simply training a neural network. It includes dataset exploration and validation (EDA), class distribution analysis, label restructuring into meaningful superclasses, controlled mitigation of class imbalance, generation of reproducible train/validation/test splits, model training with mixed precision (AMP), and standardized evaluation using COCO metrics.
 
-The goal is to build not just a trained model, but a structured and reproducible computer vision pipeline that reflects practical machine learning engineering workflow — from raw annotated data to evaluated segmentation results and saved checkpoints.
+The goal is to build not just a trained model, but a structured and reproducible computer vision pipeline that reflects practical machine learning engineering workflow - from raw annotated data to evaluated segmentation results and saved checkpoints.
 
 The final outcome is a clean, evaluation-driven segmentation framework that can be reproduced, extended, and improved further.
 ---
