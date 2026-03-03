@@ -130,9 +130,9 @@ Model training was implemented in PyTorch with the following configuration:
 
 Training artifacts include:
 
-- `best.pth` – best performing checkpoint;
-- `last.pth` – final checkpoint;
-- `metrics.json` – logged evaluation metrics.
+- `best.pth` - best performing checkpoint;
+- `last.pth` - final checkpoint;
+- `metrics.json` - logged evaluation metrics.
 
 ### 4. Evaluation Protocol
 
@@ -174,7 +174,7 @@ Training was conducted for 5 epochs. The best checkpoint was selected based on s
 
 The results demonstrate stable baseline performance across both detection and segmentation tasks. Bounding box accuracy reaches 0.48 AP on the test set, while instance segmentation achieves 0.41 AP.
 
-Performance varies across object sizes, with higher accuracy for large objects and reduced performance for small instances — a typical behavior in underwater detection scenarios.
+Performance varies across object sizes, with higher accuracy for large objects and reduced performance for small instances - a typical behavior in underwater detection scenarios.
 
 Overall, the trained model provides a solid and reproducible baseline for further optimization and experimentation.
 ---
